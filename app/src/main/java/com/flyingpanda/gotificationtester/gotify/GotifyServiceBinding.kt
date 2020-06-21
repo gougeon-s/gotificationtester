@@ -18,7 +18,7 @@ var TOKEN = ""
 var URL = ""
 
 private const val gotify_package = "com.github.gotify"
-private const val messenger_service = "$gotify_package.service.GotifyMessengerService"
+private const val messenger_service = "$gotify_package.service.GotifyRegisterService"
 
 fun logi(msg: String){
         Log.i("GotifyServiceBind",msg)
