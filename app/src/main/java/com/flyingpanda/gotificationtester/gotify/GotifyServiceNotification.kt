@@ -30,8 +30,8 @@ open class GotifyServiceNotification : Service() {
     internal inner class gHandler : Handler() {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
-                MSG_NEW_URL -> if(checkGotifyId(msg.sendingUid)) newUrl(msg)
-                MSG_NOTIFICATION -> if(checkGotifyId(msg.sendingUid)) showNotification(msg)
+                TYPE_CHANGED_URL -> if(checkGotifyId(msg.sendingUid)) newUrl(msg)
+                TYPE_MESSAGE -> if(checkGotifyId(msg.sendingUid)) showNotification(msg)
                 else -> super.handleMessage(msg)
             }
         }

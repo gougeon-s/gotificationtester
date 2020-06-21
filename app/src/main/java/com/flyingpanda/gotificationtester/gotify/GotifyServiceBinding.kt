@@ -13,6 +13,7 @@ import androidx.core.os.bundleOf
  * This Activity is used to register to gotify
  */
 
+//TODO use sharedPref
 var TOKEN = ""
 var URL = ""
 
@@ -39,8 +40,8 @@ open class GotifyServiceBinding : Activity() {
     internal open inner class gHandler : Handler() {
         override fun handleMessage(msg: Message) {
             when (msg.what) {
-                MSG_START -> logi("Received MSG_START from service")
-                MSG_REGISTER_CLIENT -> {
+                TYPE_CLIENT_STARTED -> logi("Received MSG_START from service")
+                TYPE_REGISTERED_CLIENT -> {
                     if(waitingForInfo) {
                         registerGotify(msg.sendingUid)
                         TOKEN = msg.data?.getString("token").toString()
@@ -49,7 +50,7 @@ open class GotifyServiceBinding : Activity() {
                         logi("new url: $URL")
                     }
                 }
-                MSG_UNREGISTER_CLIENT -> logi("App is unregistered")
+                TYPE_UNREGISTERED_CLIENT -> logi("App is unregistered")
                 else -> super.handleMessage(msg)
             }
         }
@@ -80,7 +81,7 @@ open class GotifyServiceBinding : Activity() {
             try {
                 // Tell the service we have started
                 val msg = Message.obtain(null,
-                    MSG_START, 0, 0)
+                    TYPE_CLIENT_STARTED, 0, 0)
                 msg.replyTo = gMessenger
                 gService!!.send(msg)
             } catch (e: RemoteException) {
@@ -121,7 +122,7 @@ open class GotifyServiceBinding : Activity() {
         }
         try {
             val msg = Message.obtain(null,
-                MSG_REGISTER_CLIENT, 0, 0)
+                TYPE_REGISTER_CLIENT, 0, 0)
             msg.replyTo = gMessenger
             msg.data = bundleOf("package" to packageName, "service" to serviceName)
             waitingForInfo = true
@@ -140,7 +141,7 @@ open class GotifyServiceBinding : Activity() {
         }
         try {
             val msg = Message.obtain(null,
-                MSG_UNREGISTER_CLIENT, 0, 0)
+                TYPE_UNREGISTER_CLIENT, 0, 0)
             msg.replyTo = gMessenger
             msg.data = bundleOf("package" to packageName)
             gService!!.send(msg)

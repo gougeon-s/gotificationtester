@@ -38,10 +38,8 @@ class CheckActivity : GotifyServiceBinding() {
         override fun handleMessage(msg: Message) {
             super.handleMessage(msg)
             when (msg.what) {
-                MSG_START -> connected()
-                MSG_REGISTER_CLIENT -> isRegistered()
-                MSG_IS_REGISTERED -> if (msg.arg1 == 1) getInfo()
-                MSG_GET_INFO -> registered()
+                TYPE_CLIENT_STARTED -> connected()
+                TYPE_REGISTERED_CLIENT -> registered()
             }
         }
     }
